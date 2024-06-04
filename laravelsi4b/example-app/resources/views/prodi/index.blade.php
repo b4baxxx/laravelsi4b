@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title','fakultas')
+@section('title','prodi')
 
 @section('content')
 
@@ -8,23 +8,23 @@
 <div class="col-lg-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Fakultas</h4>
+                  <h4 class="card-title">Prodi</h4>
                   <p class="card-description">
                     List data fakultas <code></code>
                   </p>
                   {{-- tombol tambah --}}
-                  <a href="{{route('fakultas.create')}}" class="btn btn-rounded btn-primary">Tambah</a>
+                  <a href="{{route('prodi.create')}}" class="btn btn-rounded btn-primary">Tambah</a>
                   <div class="table-responsive">
                     <table class="table">
                       <thead>
                         <tr>
-                          <th>Nama Fakultas</th>
+                          <th>Nama Program studi</th>
                           <th>singkatan</th>
 
                         </tr>
                       </thead>
                       <tbody>
-                        @foreach ($fakultas as $item)
+                        @foreach ($prodi as $item)
                         <tr>
                             <td>{{ $item["nama"]}}</td>
                             <td>{{ $item["singkatan"]}}</td>

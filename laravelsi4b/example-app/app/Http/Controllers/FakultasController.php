@@ -12,15 +12,9 @@ class FakultasController extends Controller
      */
     public function index()
     {
-<<<<<<< HEAD
         $fakultas = Fakultas::all(); // select * from fakultas
         return view('Fakultas.index')
                 ->with('fakultas', $fakultas);
-=======
-        $fakultas = ["FIKR", "FEB"];
-        return view('fakultas.index')
-        ->with('fakultas', $fakultas);
->>>>>>> a8fdf79a2d4d9e597d92ce1c5581ba33b83e17c6
     }
 
     /**
@@ -28,12 +22,7 @@ class FakultasController extends Controller
      */
     public function create()
     {
-<<<<<<< HEAD
         return view('fakultas.create');
-=======
-        return view
-        //
->>>>>>> a8fdf79a2d4d9e597d92ce1c5581ba33b83e17c6
     }
 
     /**
@@ -41,7 +30,6 @@ class FakultasController extends Controller
      */
     public function store(Request $request)
     {
-<<<<<<< HEAD
        // dd($request);
        // validasi form
        $val = $request->validate([
@@ -52,9 +40,6 @@ class FakultasController extends Controller
        Fakultas::create($val);
 
        return redirect()->route('fakultas.index')->with('success',$val['nama'].' berhasil disimpan');
-=======
-        //
->>>>>>> a8fdf79a2d4d9e597d92ce1c5581ba33b83e17c6
     }
 
     /**

@@ -1,9 +1,14 @@
 <?php
 
+<<<<<<< HEAD
 
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProdiController;
+=======
+use App\Http\Controllers\FakultasController;
+use App\Models\Fakultas;
+>>>>>>> a8fdf79a2d4d9e597d92ce1c5581ba33b83e17c6
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +23,7 @@ Route::get('profil',function(){
     return view('profil');
 });
 
+<<<<<<< HEAD
 // route dengan parameter
 Route::get('welcome/{salam}',function ($salam){
     // return 'selamat '.$salam;
@@ -41,3 +47,26 @@ Route::get('listdata', function () {
 Route::resource('fakultas',FakultasController::class);
 Route::resource('prodi' ,ProdiController::class);
 Route::resource('mahasiswa', MahasiswaController::class);
+=======
+});
+    // route dengan parameter
+    Route::get('welcome/{salam}', function ($salam){
+        // return'selamat '. $salam;
+        return view('salam')->with('viewsalam', $salam);
+    });
+
+// route tanpa parameter
+// terdapat array $list
+Route::get('listdata', function () {
+    $list = ["Sistem Informasi", "Informatika", "Manajemen"];
+    $listmhs = [
+        ["npm" => 001, "nama" => "ahmad" ],
+        ["npm" => 002, "nama" => "ratno" ]
+    ];
+    return view('listprodi') 
+    ->with('viewlist', $list)
+    ->with('viewmhs', $listmhs);
+});
+
+Route::resource('fakultas', FakultasController::class);
+>>>>>>> a8fdf79a2d4d9e597d92ce1c5581ba33b83e17c6

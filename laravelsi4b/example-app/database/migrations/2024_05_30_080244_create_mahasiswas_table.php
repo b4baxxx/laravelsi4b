@@ -21,8 +21,8 @@ return new class extends Migration
              //  $table->foreignId('prodi_id')->constrained(); // relasi ke kolom id pada tabel prodis
              $table->unsignedBigInteger('prodi_id');
              $table->foreign('prodi_id')->references('id')->on('prodi');
-
-             $table->string('url_foto');
+             
+             $table->string('url_foto'); 
             $table->timestamps();
         });
     }

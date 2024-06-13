@@ -1,0 +1,5 @@
+JALAN 2 TERMINAL
+composer install
+
+npm install
+npm run dev

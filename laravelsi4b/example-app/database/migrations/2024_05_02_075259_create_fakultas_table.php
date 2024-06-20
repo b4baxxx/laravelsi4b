@@ -11,20 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prodis', function (Blueprint $table) {
-            $table->id();
+        Schema::create('fakultas', function (Blueprint $table) {
+            $table->id();  // id integer autoincrement (1, 2, 3, dst)
             $table->string('nama', 45);
-            $table->string('singkatan', 2);
-            $table->foreignId('fakultas_id')->constrained();// relasi ke kolom id pada tabel fakultas
-            $table->timestamps();
+            $table->string('singkatan', 4);
+            $table->timestamps(); // created_at dan updated_at  
         });
-    }
+        }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('prodis');
+        Schema::dropIfExists('fakultas');
     }
 };

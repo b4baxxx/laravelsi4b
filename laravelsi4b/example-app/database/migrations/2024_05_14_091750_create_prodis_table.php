@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->char('role', 1 )->default('D')->after('name');
-            //
+        Schema::create('prodis', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama', 45);
+            $table->string('singkatan', 4);
+            $table->foreignId('fakultas_id')->constrained(); // relasi ke kolom id pada tabel fakultas
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('prodis');
     }
 };

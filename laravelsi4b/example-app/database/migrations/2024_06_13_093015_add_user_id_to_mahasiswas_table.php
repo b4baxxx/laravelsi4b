@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fakultas', function (Blueprint $table) {
-            $table->id(); // id integer autoicrement (1,2,3,dst)
-            $table->string('nama', 45);
-            $table->string('singkatan', 4);
-            $table->timestamps(); //created_at dan update_at
+        Schema::table('mahasiswas', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->default('1');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fakultas');
+        Schema::table('mahasiswas', function (Blueprint $table) {
+            //
+        });
     }
 };

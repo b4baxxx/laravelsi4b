@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Fakultas;
+use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class FakultasPolicy
+class MahasiswaPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class FakultasPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Fakultas $fakultas): bool
+    public function view(User $user, Mahasiswa $mahasiswa): bool
     {
         //
     }
@@ -29,14 +29,15 @@ class FakultasPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'A';
-
+        //role A dna  D diizinan untuk membuat data mahasiswa
+        return $user->role === 'A' || $user->role === 'D';
+        // return in_array($user->role, ['A', 'D']);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Fakultas $fakultas): bool
+    public function update(User $user, Mahasiswa $mahasiswa): bool
     {
         return $user->role === 'A';
     }
@@ -44,7 +45,7 @@ class FakultasPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Fakultas $fakultas): bool
+    public function delete(User $user, Mahasiswa $mahasiswa): bool
     {
         return $user->role === 'A';
     }
@@ -52,7 +53,7 @@ class FakultasPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Fakultas $fakultas): bool
+    public function restore(User $user, Mahasiswa $mahasiswa): bool
     {
         //
     }
@@ -60,7 +61,7 @@ class FakultasPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Fakultas $fakultas): bool
+    public function forceDelete(User $user, Mahasiswa $mahasiswa): bool
     {
         //
     }

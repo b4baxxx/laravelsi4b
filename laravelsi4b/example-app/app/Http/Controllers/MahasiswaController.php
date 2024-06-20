@@ -14,9 +14,15 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswas = Mahasiswa::all(); // select * from mahasiswa
-        return view('Mahasiswa.index')
-                ->with('mahasiswas', $mahasiswas);
+        if(auth()->user()->role == 'D') {
+            $mahasiswa = Mahasiswa::where('user_id', auth()->user()->id)->get();
+            //select * from mahasiswas where user_id = 1
+        } else {
+            $mahasiswa = Mahasiswa::all();
+        }
+
+        return view('mahasiswa.index')
+                ->with('mahasiswa', $mahasiswa);
     }
 
     /**
@@ -33,42 +39,36 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->url_foto){ //jika ada file foto yang di lampirkan
-        
-            
-        $val = $request->validate([
-            'npm'=> "required",
-            'nama'=> "required|unique:mahasiswas",
-            'tempat_lahir'=> "required",
-            'tanggal_lahir'=>  "required",
-            'alamat'=>  "required",
-            'prodi_id'=>  "required",
-            'url_foto'=>  "required|file|mimes:png,jpg|max:5000"
-           ]);
-
-        
-
-        //SIMPAN KE TABEL mahasiswa
-           
-
-
-           // ekstensi file yang diupload
-           $ext =
-           $request->url_foto->getClientOriginalExtension();
-           // rename misal:npm.ekstensi 2226240001.png
-           $val['url_foto'] = $request->npm.".".$ext;
-           // upload ke dalam folder public/foto
-           $request->url_foto->move('foto',$val['url_foto']);
-           // simpan ke tabel mahasiswas
-
-        }
-            
-           
-       Mahasiswa::create($val);
-
-       return redirect()->route('mahasiswa.index')->with('success',$val['npm'].' berhasil disimpan');
-    }
     
+        // return $request;
+        if ($request->user()->cannot('create', Mahasiswa::class)) {
+            abort(403);
+        }
+
+        $val = $request->validate([
+            'npm' => "required|max:10", 
+            'nama' => "required",
+            'tempat_lahir' => "required", 
+            'tanggal_lahir' => "required", 
+            'alamat' => "required", 
+            'prodi_id' => "required",
+            'url_foto' => "required|file|mimes:png,jpg|max:5000"
+        ]);
+
+        // ekstensi file yang di upload
+        $ext = $request->url_foto->getClientOriginalExtension();
+        // rename misal : npm.extensi 2226240152.png
+        $val['url_foto'] = $request->npm.".".$ext;
+        //upload ke dalam folder public/foto
+        $request->url_foto->move('foto', $val['url_foto']);
+
+        // simpan tabel fakultas
+        Mahasiswa::create($val);
+
+        // // radirect ke halaman list fakultas
+        return redirect()->route('mahasiswa.index')->with('success', $val['nama'], 'berhasil disimpan');
+
+    }
 
     /**
      * Display the specified resource.
@@ -83,12 +83,11 @@ class MahasiswaController extends Controller
      */
     public function edit(Mahasiswa $mahasiswa)
     {
-        //dd($mahasiswa);
+        // dd($mahasiswa);
         $prodi = Prodi::all();
         return view('mahasiswa.edit')
-            ->with('prodi',$prodi)
-            ->with('mahasiswa',$mahasiswa);
-
+                ->with('prodi', $prodi)
+                ->with('mahasiswa',$mahasiswa);
     }
 
     /**
@@ -96,53 +95,53 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, Mahasiswa $mahasiswa)
     {
-        if($request->url_foto){ //jika ada file foto yang di lampirkan
-        
-            
-            $val = $request->validate([
-                //'npm'=> "required",
-                'nama'=> "required|unique:mahasiswas",
-                'tempat_lahir'=> "required",
-                'tanggal_lahir'=>  "required",
-                'alamat'=>  "required",
-                'prodi_id'=>  "required",
-               // 'url_foto'=>  "required|file|mimes:png,jpg|max:5000"
-               ]);
-    
-            
-    
-            //SIMPAN KE TABEL mahasiswa
-               
-    
-    
-               // ekstensi file yang diupload
-               $ext =
-               $request->url_foto->getClientOriginalExtension();
-               // rename misal:npm.ekstensi 2226240001.png
-               $val['url_foto'] = $request->npm.".".$ext;
-               // upload ke dalam folder public/foto
-               $request->url_foto->move('foto',$val['url_foto']);
-               // simpan ke tabel mahasiswas
-    
-            }else { // jika tidak ada file foto
-                $val = $request->validate([
-                    //'npm'=> "required",
-                    'nama'=> "required|unique:mahasiswas",
-                    'tempat_lahir'=> "required",
-                    'tanggal_lahir'=>  "required",
-                    'alamat'=>  "required",
-                    'prodi_id'=>  "required",
-                   // 'url_foto'=>  "required|file|mimes:png,jpg|max:5000"
-                   ]);
-        
-                }
-                
-               
-           Mahasiswa::where('id', $mahasiswa['id'])->update($val);
-    
-           return redirect()->route('mahasiswa.index')->with('success',$val['nama'].' berhasil disimpan');
+        // dd($request)
+        // if (auth()->user()->cannot('update', $mahasiswa)) {
+        //     abort(403);
+        // }
+
+        if (auth()->user()->cannot('update', $mahasiswa)) {
+            abort(403);
         }
-    
+
+        if($request->url_foto) { //jika ada file foto yang dilampirkan
+            $val = $request->validate([
+                // 'npm' => "required|max:10", 
+                'nama' => "required",
+                'tempat_lahir' => "required", 
+                'tanggal_lahir' => "required", 
+                'alamat' => "required", 
+                'prodi_id' => "required",
+                'url_foto' => "required|file|mimes:png,jpg|max:5000"
+            ]);
+
+            $ext = $request->url_foto->getClientOriginalExtension();
+            // rename misal : npm.extensi 2226240152.png
+            $val['url_foto'] = $request->npm.".".$ext;
+            //upload ke dalam folder public/foto
+            $request->url_foto->move('foto', $val['url_foto']);
+
+        } else {
+            $val = $request->validate([
+                // 'npm' => "required|max:10", 
+                'nama' => "required",
+                'tempat_lahir' => "required", 
+                'tanggal_lahir' => "required", 
+                'alamat' => "required", 
+                'prodi_id' => "required",
+                // 'url_foto' => "required|file|mimes:png,jpg|max:5000"
+            ]);
+       
+        }
+
+        // simpan tabel fakultas
+        Mahasiswa::where('id', $mahasiswa['id'])->update($val);
+
+        // // radirect ke halaman list fakultas
+        return redirect()->route('mahasiswa.index')->with('success', $val['nama'], 'berhasil diubah');
+
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -150,8 +149,13 @@ class MahasiswaController extends Controller
     public function destroy(Mahasiswa $mahasiswa)
     {
         // dd($mahasiswa);
+        if (auth()->user()->cannot('delete', $mahasiswa)) {
+            abort(403);
+        }
         File::delete('foto/'. $mahasiswa['url_foto']);
-        $mahasiswa->delete(); // hapus data  mahasiswa
-        return redirect()->route('mahasiswa.index')->with('success','Data berhasil dihapus.');
+        $mahasiswa->delete(); //hapus data mahasiswa
+        return redirect()->route('mahasiswa.index')->with('success', 'Data berhasil dihapus.');
+
     }
+    
 }

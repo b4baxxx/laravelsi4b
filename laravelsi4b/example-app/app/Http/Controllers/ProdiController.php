@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Fakultas;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Unique;
 
 class ProdiController extends Controller
 {
@@ -14,19 +13,20 @@ class ProdiController extends Controller
      */
     public function index()
     {
-        $prodi = Prodi::all(); 
+        $prodi = Prodi::all();
         return view('prodi.index')
                 ->with('prodi', $prodi);
     }
-    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+        // return view('prodi.create');
         $fakultas = Fakultas::all();
-        return view('prodi.create')->with('fakultas',$fakultas);
+        return view('prodi.create')
+                ->with('fakultas', $fakultas);
     }
 
     /**
@@ -34,19 +34,21 @@ class ProdiController extends Controller
      */
     public function store(Request $request)
     {
-         $val = $request->validate([
-            'nama' => "required|unique:fakultas ",
+        if ($request->user()->cannot('create',
+        Prodi::class)) {
+            abort(403);
+        }
+
+        $val = $request->validate([
+            'nama' => "required|unique:fakultas",
             'singkatan' => "required|max:4",
             'fakultas_id' => "required"
-    ]);
-    
+        ]);
+
         Prodi::create($val);
 
-    return redirect()->route('prodi.index')->with('success',$val['nama'].' Berhasil disimpan');
-}
-
-
-    
+        return redirect()->route('prodi.index')->with('success',$val['nama'].' berhasil disimpan');
+    }
 
     /**
      * Display the specified resource.

@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fakultas extends Model
 {
-    use HasFactory;
+    use HasFactory; 
+    protected $fillable = ['nama', 'singkatan'];
 
-    protected $fillable = ['nama', 'singkatan',];
 }
-
